@@ -1,0 +1,110 @@
+
+[
+  {
+    "day": 1,
+    "title": "Arrival in Baltra & Santa Cruz Highlands",
+    "program": "<p>Welcome to the Galapagos! Upon arrival at Baltra Airport (GPS), you will be greeted by our representative. We will then take a short ferry ride across the Itabaca Channel to Santa Cruz Island. Our first stop is the highlands to see the iconic giant tortoises in their natural habitat. We will also explore some lava tunnels. Lunch is included. In the afternoon, we'll head to Puerto Ayora and check into our hotel.</p><p>For more details on the airport, see the <a href='https://www.ecogalapagos.com/baltra-airport'>official airport information</a>.</p>",
+    "background": "<p>Santa Cruz is the second largest island in the Galapagos and the most populated. The highlands offer a lush, green contrast to the arid coastal areas. This is due to the higher altitude capturing more moisture. The giant tortoises found here are a subspecies unique to Santa Cruz.</p>",
+    "packing_advice": "Comfortable walking shoes, light rain jacket, camera, binoculars, sun hat, and sunscreen."
+  },
+  {
+    "day": 2,
+    "title": "North Seymour Island & Bachas Beach",
+    "program": "<p>Today we take a day trip by yacht to North Seymour Island. This small, flat island is a paradise for birdwatchers. We'll walk along a trail where we can spot blue-footed boobies, magnificent frigatebirds with their inflated red pouches, and land iguanas. After the walk, we'll snorkel in the turquoise waters. In the afternoon, we visit Bachas Beach on Santa Cruz, a beautiful white-sand beach and a nesting site for sea turtles.</p>",
+    "background": "<p>North Seymour was formed by geological uplift and is a crucial breeding ground for many species. The blue-footed booby's comical courtship dance is a highlight for many visitors. The name 'Bachas' comes from the English word 'barges', which were wrecked offshore here during World War II.</p>",
+    "packing_advice": "Swimsuit, towel, water shoes, sunscreen, sunglasses, and a waterproof bag for electronics."
+  },
+  {
+    "day": 3,
+    "title": "Charles Darwin Research Station & Tortuga Bay",
+    "program": "<p>In the morning, we visit the Charles Darwin Research Station in Puerto Ayora. We'll learn about the conservation efforts and see the tortoise breeding center, including the famous Lonesome George exhibit. In the afternoon, we'll take a beautiful walk to Tortuga Bay, a stunning beach with pristine sand where marine iguanas are often seen. It's a great spot for relaxing, swimming, or kayaking.</p><p>Learn more about the research station at their <a href='https://www.darwinfoundation.org/en/'>official website</a>.</p>",
+    "background": "<p>The Charles Darwin Foundation has been instrumental in the conservation of the Galapagos ecosystem since 1959. Their work is vital for the preservation of species like the giant tortoise. Tortuga Bay is named for the black sea turtles that nest there.</p>",
+    "packing_advice": "Walking shoes, swimsuit, towel, plenty of water, and snacks."
+  },
+  {
+    "day": 4,
+    "title": "Isabela Island & Tintoreras",
+    "program": "<p>We take an early morning speedboat to Isabela Island, the largest island in the archipelago. After checking into our hotel in Puerto Villamil, we'll take a short boat trip to 'Las Tintoreras', a small islet group. Here, we can often see white-tipped reef sharks resting in a lava channel, as well as sea lions, marine iguanas, and Galapagos penguins.</p>",
+    "background": "<p>Isabela Island was formed by the merger of six shield volcanoes, five of which are still active. Puerto Villamil is a charming and relaxed coastal town with long, white-sand beaches. 'Tintoreras' is the local name for the white-tipped reef sharks.</p>",
+    "packing_advice": "Motion sickness medication for the boat ride, camera, light jacket."
+  },
+  {
+    "day": 5,
+    "title": "Sierra Negra Volcano Hike",
+    "program": "<p>Today's adventure is a hike to the Sierra Negra volcano, which boasts one of the largest volcanic calderas in the world. We'll walk along the rim of the crater and, weather permitting, continue to Volcan Chico to see a moon-like landscape of lava fields and fumaroles. The views are spectacular. This is a moderately challenging hike of about 16 km (10 miles).</p>",
+    "background": "<p>Sierra Negra's caldera is approximately 10 km in diameter. The volcano last erupted in 2018, and the fresh lava flows are a stark reminder of the islands' volcanic origins. The landscape around Volcan Chico provides a glimpse into the raw power of geological forces.</p>",
+    "packing_advice": "Sturdy hiking boots, long pants, layered clothing, rain gear, sun protection, and lots of water."
+  },
+  {
+    "day": 6,
+    "title": "Los Tuneles Snorkeling",
+    "program": "<p>We embark on a boat trip to Los Tuneles, a unique geological formation of lava tunnels and arches both above and below the water. This is considered one of the best snorkeling spots in the Galapagos. We'll swim with sea turtles, rays, reef sharks, and a variety of colorful fish. We might even spot seahorses and penguins.</p>",
+    "background": "<p>The lava formations at Los Tuneles were created when hot lava flowed into the cool ocean, creating a network of tunnels and bridges. The clear, calm waters create a perfect aquarium-like environment for marine life.</p>",
+    "packing_advice": "Swimsuit, wetsuit (can be rented), underwater camera, towel, and sunscreen."
+  },
+  {
+    "day": 7,
+    "title": "Return to Santa Cruz & Free Afternoon",
+    "program": "<p>We take a morning speedboat back to Santa Cruz Island. After checking back into our hotel in Puerto Ayora, the rest of the day is free for you to explore the town at your own pace. You can go souvenir shopping, visit the local fish market, or relax at a waterfront cafe.</p>",
+    "background": "<p>The journey between islands offers a chance to reflect on the unique characteristics of each location. Puerto Ayora offers more amenities than other towns, making it a good base for independent exploration.</p>",
+    "packing_advice": "Casual clothes for exploring the town."
+  },
+  {
+    "day": 8,
+    "title": "San Cristobal Island & Interpretation Center",
+    "program": "<p>An early morning flight takes us to San Cristobal, the easternmost island. After settling in, we'll visit the San Cristobal Interpretation Center to get a comprehensive overview of the natural and human history of the Galapagos. Afterwards, we'll take a short walk to Tijeretas Hill for a panoramic view and a chance to see two species of frigatebirds nesting side-by-side.</p>",
+    "background": "<p>San Cristobal is home to the oldest permanent settlement and the provincial capital, Puerto Baquerizo Moreno. It was also the first island Darwin visited in 1835. The Interpretation Center provides excellent context for everything seen on the trip.</p>",
+    "packing_advice": "Comfortable walking shoes, camera."
+  },
+  {
+    "day": 9,
+    "title": "Kicker Rock (León Dormido)",
+    "program": "<p>The highlight of San Cristobal is a boat trip to Kicker Rock, or 'León Dormido' (Sleeping Lion). This stunning rock formation is the remains of a volcanic cone. We'll snorkel or dive in the channel between the rocks, a popular spot for Galapagos sharks, hammerhead sharks, eagle rays, and sea turtles. It's an unforgettable underwater experience.</p><p>Check out a video of the experience <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>here</a>.</p>",
+    "background": "<p>Kicker Rock erodes over time, creating a rich habitat for marine life. The vertical walls of the rock are covered in corals and sponges, attracting a huge diversity of species. The name 'Sleeping Lion' comes from the shape of the rock formation when viewed from the south.</p>",
+    "packing_advice": "Wetsuit, underwater camera, courage for the sharks!"
+  },
+  {
+    "day": 10,
+    "title": "La Lobería & Highlands of San Cristobal",
+    "program": "<p>In the morning, we visit La Lobería, a beach famous for its large colony of sea lions. We can watch them play and surf in the waves. In the afternoon, we explore the highlands of San Cristobal, visiting El Junco Lagoon, the only freshwater lake in the Galapagos, and the Galapaguera de Cerro Colorado, a breeding center for giant tortoises.</p>",
+    "background": "<p>'La Lobería' means 'the sea lion place'. These curious animals are often very interactive. El Junco Lagoon is a crater lake that provides a vital freshwater source for many birds on the island.</p>",
+    "packing_advice": "Binoculars for birdwatching, walking shoes."
+  },
+  {
+    "day": 11,
+    "title": "Española Island: Punta Suarez & Gardner Bay",
+    "program": "<p>A full-day yacht trip to Española Island, one of the oldest islands. At Punta Suarez, we'll see an incredible concentration of wildlife, including the famous waved albatross (seasonal, April-Dec), Nazca boobies, and colorful marine iguanas. In the afternoon, we'll relax at Gardner Bay, a beautiful white sand beach with a colony of playful sea lions.</p>",
+    "background": "<p>Española is a classic example of evolution in isolation, with a high number of endemic species. The waved albatross nests almost exclusively on this island. Its elaborate mating dance is a spectacular sight.</p>",
+    "packing_advice": "Long-sleeved shirt for sun protection, good walking shoes, and your best camera lens."
+  },
+  {
+    "day": 12,
+    "title": "Floreana Island & Post Office Bay",
+    "program": "<p>We take a speedboat to Floreana Island, which has a rich and mysterious human history. We'll visit Post Office Bay, where you can participate in a 200-year-old tradition by leaving a postcard and taking one to hand-deliver. We'll also snorkel at Devil's Crown, a submerged volcanic cone teeming with fish.</p>",
+    "background": "<p>Floreana's history is filled with tales of pirates, whalers, and eccentric settlers. The Post Office Bay tradition was started by whalers in the 18th century as a way to send mail home. Devil's Crown is another of the top snorkeling sites in the archipelago.</p>",
+    "packing_advice": "A postcard to leave at Post Office Bay."
+  },
+  {
+    "day": 13,
+    "title": "Exploring Santa Fe Island",
+    "program": "<p>Day trip to Santa Fe Island. After a wet landing, we'll walk through a forest of giant Opuntia cacti, looking for the endemic Santa Fe land iguana, which is paler in color than its cousins on other islands. Afterwards, we'll snorkel with sea lions in the calm bay.</p>",
+    "background": "<p>Santa Fe is a relatively small and arid island. The giant prickly pear cacti here are a key food source for the land iguanas. The bay is a popular anchorage for tour boats due to its protected nature and friendly sea lions.</p>",
+    "packing_advice": "Water shoes for the wet landing, sun hat."
+  },
+  {
+    "day": 14,
+    "title": "Black Turtle Cove & Free Afternoon",
+    "program": "<p>On our last full day, we take a 'panga' (dinghy) ride into Black Turtle Cove on the north shore of Santa Cruz. This mangrove estuary is a mating and nursery area for sea turtles, rays, and sharks. It's a peaceful and quiet exploration, as motors are turned off. The afternoon is free for last-minute souvenir shopping or relaxing in Puerto Ayora.</p>",
+    "background": "<p>Mangrove ecosystems are vital as nurseries for many marine species, protecting them from larger predators. The calm waters of Black Turtle Cove make it an ideal sanctuary.</p>",
+    "packing_advice": "A light sweater for the early morning boat ride."
+  },
+  {
+    "day": 15,
+    "title": "Departure",
+    "program": "<p>After breakfast, we will travel to the Baltra airport for your flight back to the mainland. We hope you had an unforgettable journey through the Enchanted Islands!</p>",
+    "background": "<p>Remember to share your memories and advocate for the conservation of this unique World Heritage Site.</p>",
+    "packing_advice": "Ensure your bags are packed and you have all your travel documents."
+  }
+]
+
+    
