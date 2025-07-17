@@ -186,10 +186,10 @@ export default function ItineraryDisplay() {
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2">
                            <Button onClick={handleLoadClick} variant="outline" size="sm">
-                                <Upload /> Nieuw bestand laden
+                                <Upload /> Reisplan laden
                             </Button>
                             <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary}>
-                                <Save /> JSON Opslaan
+                                <Save /> Reisplan opslaan
                             </Button>
                         </div>
                         {!isOnline && (
