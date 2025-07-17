@@ -4,7 +4,7 @@
 import type { Itinerary } from '@/lib/types';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/button';
-import { Upload, Ship, WifiOff } from 'lucide-react';
+import { Upload, Ship, WifiOff, Save } from 'lucide-react';
 import { Accordion } from './ui/accordion';
 import { DayCard } from './day-card';
 import { useToast } from '@/hooks/use-toast';
@@ -45,7 +45,7 @@ export default function ItineraryDisplay() {
         fetch('/reisdata.json')
           .then(res => {
             if (!res.ok) {
-              throw new Error("Could not fetch default itinerary");
+              throw new Error("Kon standaard reisplan niet ophalen");
             }
             return res.json();
           })
@@ -57,24 +57,33 @@ export default function ItineraryDisplay() {
             console.error(error);
             toast({
               variant: "destructive",
-              title: "Error",
-              description: "Could not load default itinerary data.",
+              title: "Fout",
+              description: "Kon standaard reisplan niet laden.",
             });
           });
       }
     } catch (error) {
-      console.error("Could not load itinerary:", error);
-      localStorage.removeItem('galapagos-itinerary'); // Clear corrupted data
+      console.error("Kon reisplan niet laden:", error);
+      localStorage.removeItem('galapagos-itinerary');
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load saved itinerary. The data might be corrupted.",
+        title: "Fout",
+        description: "Kon opgeslagen reisplan niet laden. De gegevens zijn mogelijk beschadigd.",
       });
     } finally {
       setIsLoading(false);
     }
   }, [toast]);
 
+  const handleNotesChange = (dayNumber: number, notes: string) => {
+    if (!itinerary) return;
+    const newItinerary = itinerary.map(day => 
+      day.day === dayNumber ? { ...day, notes } : day
+    );
+    setItinerary(newItinerary);
+    localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
+  };
+  
   const handleLoadClick = () => {
     fileInputRef.current?.click();
   };
@@ -91,21 +100,38 @@ export default function ItineraryDisplay() {
             setItinerary(json);
             localStorage.setItem('galapagos-itinerary', text);
             toast({
-              title: "Success",
-              description: "Itinerary loaded successfully.",
+              title: "Succes",
+              description: "Reisplan succesvol geladen.",
             });
           }
         } catch (error) {
-          console.error("Error parsing JSON file:", error);
+          console.error("Fout bij parsen JSON-bestand:", error);
           toast({
             variant: "destructive",
-            title: "File Error",
-            description: "Could not parse the JSON file. Please check its format.",
+            title: "Bestandsfout",
+            description: "Kon het JSON-bestand niet parsen. Controleer het formaat.",
           });
         }
       };
       reader.readAsText(file);
     }
+  };
+
+  const handleSaveJson = () => {
+    if (!itinerary) return;
+
+    const dataStr = JSON.stringify(itinerary, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', 'reisdata_met_notities.json');
+    linkElement.click();
+    
+    toast({
+        title: "Succes",
+        description: "Reisplan opgeslagen als JSON-bestand.",
+    });
   };
 
   const renderContent = () => {
@@ -126,12 +152,12 @@ export default function ItineraryDisplay() {
       return (
         <CardContent className="mt-6 text-center">
             <Ship className="mx-auto h-12 w-12 text-primary" />
-            <h3 className="mt-4 text-lg font-medium">No Itinerary Loaded</h3>
+            <h3 className="mt-4 text-lg font-medium">Geen Reisplan Geladen</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Load your 'reisdata.json' file to see your trip details.
+              Laad uw 'reisdata.json' bestand om uw reisdetails te zien.
             </p>
             <Button onClick={handleLoadClick} className="mt-6">
-                <Upload className="mr-2 h-4 w-4" /> Load from Device
+                <Upload className="mr-2 h-4 w-4" /> Laad van Apparaat
             </Button>
         </CardContent>
       )
@@ -141,7 +167,7 @@ export default function ItineraryDisplay() {
         <CardContent>
             <Accordion type="single" collapsible className="w-full">
                 {itinerary.map((day) => (
-                    <DayCard key={day.day} day={day} />
+                    <DayCard key={day.day} day={day} onNotesChange={handleNotesChange} />
                 ))}
             </Accordion>
         </CardContent>
@@ -154,17 +180,22 @@ export default function ItineraryDisplay() {
             <CardHeader>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <CardTitle className="font-headline text-4xl text-accent">Galapagos Itinerary</CardTitle>
-                        <CardDescription className="mt-2">Your 15-day journey through the Enchanted Islands.</CardDescription>
+                        <CardTitle className="font-headline text-4xl text-accent">Galapagos Reisplan</CardTitle>
+                        <CardDescription className="mt-2">Jouw 15-daagse reis door de Betoverende Eilanden.</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                        <Button onClick={handleLoadClick} variant="outline" size="sm">
-                            <Upload className="mr-2 h-4 w-4" /> Load New File
-                        </Button>
+                        <div className="flex gap-2">
+                           <Button onClick={handleLoadClick} variant="outline" size="sm">
+                                <Upload /> Nieuw bestand laden
+                            </Button>
+                            <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary}>
+                                <Save /> JSON Opslaan
+                            </Button>
+                        </div>
                         {!isOnline && (
                              <div className="flex items-center text-xs text-destructive gap-2 p-2 rounded-md bg-destructive/10">
                                 <WifiOff size={14} />
-                                <span>Offline Mode</span>
+                                <span>Offline Modus</span>
                             </div>
                         )}
                     </div>
@@ -176,5 +207,3 @@ export default function ItineraryDisplay() {
     </div>
   );
 }
-
-    
