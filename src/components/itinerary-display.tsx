@@ -4,7 +4,7 @@
 import type { Itinerary } from '@/lib/types';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/button';
-import { Upload, Ship, WifiOff, Save } from 'lucide-react';
+import { Upload, Ship, WifiOff, Save, ChevronsUpDown } from 'lucide-react';
 import { Accordion } from './ui/accordion';
 import { DayCard } from './day-card';
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +15,7 @@ export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
+  const [openDays, setOpenDays] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -134,6 +135,16 @@ export default function ItineraryDisplay() {
     });
   };
 
+  const toggleAllDays = () => {
+    if (!itinerary) return;
+    if (openDays.length === itinerary.length) {
+      setOpenDays([]);
+    } else {
+      setOpenDays(itinerary.map((day, index) => `day-${index + 1}`));
+    }
+  };
+
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -165,7 +176,7 @@ export default function ItineraryDisplay() {
 
     return (
         <CardContent>
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion type="multiple" value={openDays} onValueChange={setOpenDays} className="w-full">
                 {itinerary.map((day, index) => (
                     <DayCard key={index} day={day} dayIndex={index} onNotesChange={handleNotesChange} />
                 ))}
@@ -184,12 +195,15 @@ export default function ItineraryDisplay() {
                         <CardDescription className="mt-2">Jouw 15-daagse reis door de Betoverende Eilanden.</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap justify-end">
                            <Button onClick={handleLoadClick} variant="outline" size="sm">
                                 <Upload /> Reisplan laden
                             </Button>
                             <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary}>
                                 <Save /> Reisplan opslaan
+                            </Button>
+                             <Button onClick={toggleAllDays} variant="outline" size="sm" disabled={!itinerary}>
+                                <ChevronsUpDown /> Alles Open/Dicht
                             </Button>
                         </div>
                         {!isOnline && (
