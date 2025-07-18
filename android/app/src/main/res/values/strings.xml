@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">GalapagosReislan</string>
+    <string name="title_activity_main">GalapagosReislan</string>
+    <string name="package_name">com.gosoftonline.galapagosreisplan</string>
+    <string name="custom_url_scheme">com.gosoftonline.galapagosreisplan</string>
+</resources>

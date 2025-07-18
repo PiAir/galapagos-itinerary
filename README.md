@@ -1,5 +1,5 @@
-# Firebase Studio
+# Firebase Studio to Android using Capacitor
 
-This is a NextJS starter in Firebase Studio.
+Prototype using NextJS in Firebase Studio, committed to github, local copy, build and converted.
 
-To get started, take a look at src/app/page.tsx.
+
