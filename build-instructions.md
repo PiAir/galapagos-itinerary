@@ -63,7 +63,7 @@ Of gebruik `npx http-server out`, of open de bestanden direct in de browser.
 5.  Gebruik **Logcat** onderin Android Studio voor debugging
 
 
-**  Updaten Android app na wijzigingen in Firebase:**
+**4.  Updaten Android app na wijzigingen in Firebase:**
 
     npm run build
     npx cap sync android
