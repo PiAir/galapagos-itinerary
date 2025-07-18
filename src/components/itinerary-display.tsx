@@ -13,6 +13,7 @@ import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
+import write_blob from 'capacitor-blob-writer';
 
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -138,58 +139,29 @@ export default function ItineraryDisplay() {
 
   const handleSaveJson = async () => {
     toast({ title: "Progress", description: "Start opslaan reisplan." });
-    if (!itinerary) return;
+    console.log('Start handleSaveJson');
+    if (!itinerary) {
+	toast({ title: "Fout", description: "Geen itinerary om op te slaan." });
+	return;
+    }
     const dataStr = JSON.stringify(itinerary, null, 2);
 
-    // Browser-desktop variant
-    if (typeof window !== 'undefined' && 'showSaveFilePicker' in window) {
-      try {
-        const handle = await window.showSaveFilePicker({
-          suggestedName: 'reisdata_met_notities.json',
-          types: [{ description: 'JSON Files', accept: { 'application/json': ['.json'] } }],
-        });
-        const writable = await handle.createWritable();
-        await writable.write(dataStr);
-        await writable.close();
-        toast({ title: "Succes", description: "Reisplan succesvol opgeslagen." });
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
-          console.error("Fout bij browser opslaan:", err);
-          toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon reisplan niet opslaan." });
-        }
-      }
-    }
-    // Mobiele variant (Capacitor plugin)
-    else {
-      try {
-	// Controleer en vraag permissie
-	const perm = await FilePicker.checkPermissions();
-	console.log('Perm status:', perm);
-
-	if (perm.readExternalStorage !== 'granted') {
-  		const req = await FilePicker.requestPermissions();
-  		console.log('Permatieverzoek:', req);
-  		if (req.readExternalStorage !== 'granted') {
-    		  toast({ variant: 'destructive', title: 'Geen toestemming', description: 'Geen toegang tot opslag' });
-    		  return;
-  		}
-	}
-        const result = await FilePicker.pickFiles({ types: ['application/json'] });
-        if (result.files.length === 0) return;
-        const file = result.files[0];
-
-        const res = await Filesystem.writeFile({
-  	  path: 'reisplan.json',
-  	  data: JSON.stringify(itinerary, null, 2),
-  	  directory: Directory.External,
-  	  encoding: Encoding.UTF8,
-	});;
-	console.log('Wrote URI:', res.uri);
-        toast({ title: "Succes", description: "Reisplan succesvol opgeslagen." });
-      } catch (err) {
-        console.error("Fout bij mobiel opslaan:", err);
-        toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon reisplan niet opslaan." });
-      }
+    try {
+	const blob = new Blob([dataStr], { type: 'application/json' });
+	const uri = await write_blob({
+  	   path: `reisplan-${Date.now()}.json`,
+  	   directory: Directory.Documents,
+  	   blob,
+  	   recursive: true,
+  	   on_fallback(err) {
+    	     console.warn('Fallback write:', err);
+  	   }
+	});
+	console.log('Schrijf-URI:', uri);
+	toast({ title: 'Succes', description: 'Reisplan opgeslagen.' });
+    } catch (err) {
+      console.error("Fout bij mobiel opslaan:", err);
+      toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon JSON niet opslaan." });
     }
   };
 
