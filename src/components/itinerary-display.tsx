@@ -11,6 +11,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -135,47 +137,59 @@ export default function ItineraryDisplay() {
   }
 
   const handleSaveJson = async () => {
+    toast({ title: "Progress", description: "Start opslaan reisplan." });
     if (!itinerary) return;
-
     const dataStr = JSON.stringify(itinerary, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
 
-    // Use the File System Access API if available
-    if ('showSaveFilePicker' in window) {
+    // Browser-desktop variant
+    if (typeof window !== 'undefined' && 'showSaveFilePicker' in window) {
       try {
         const handle = await window.showSaveFilePicker({
           suggestedName: 'reisdata_met_notities.json',
-          types: [{
-            description: 'JSON Files',
-            accept: { 'application/json': ['.json'] },
-          }],
+          types: [{ description: 'JSON Files', accept: { 'application/json': ['.json'] } }],
         });
         const writable = await handle.createWritable();
-        await writable.write(blob);
+        await writable.write(dataStr);
         await writable.close();
-        toast({
-            title: "Succes",
-            description: "Reisplan succesvol opgeslagen.",
-        });
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') {
-          console.log('Save dialog was cancelled by the user.');
-        } else if (err instanceof DOMException && err.name === 'SecurityError') {
-            console.warn("File picker failed due to security sandbox. Using fallback.", err);
-            fallbackSave(blob);
-        } else {
-          console.error("Fout bij opslaan bestand:", err);
-          fallbackSave(blob); // Fallback on other unexpected errors too
-          toast({
-              variant: "destructive",
-              title: "Opslaan Mislukt",
-              description: "Kon het bestand niet opslaan, fallback gebruikt.",
-          });
+        toast({ title: "Succes", description: "Reisplan succesvol opgeslagen." });
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          console.error("Fout bij browser opslaan:", err);
+          toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon reisplan niet opslaan." });
         }
       }
-    } else {
-      // Fallback for older browsers
-      fallbackSave(blob);
+    }
+    // Mobiele variant (Capacitor plugin)
+    else {
+      try {
+	// Controleer en vraag permissie
+	const perm = await FilePicker.checkPermissions();
+	console.log('Perm status:', perm);
+
+	if (perm.readExternalStorage !== 'granted') {
+  		const req = await FilePicker.requestPermissions();
+  		console.log('Permatieverzoek:', req);
+  		if (req.readExternalStorage !== 'granted') {
+    		  toast({ variant: 'destructive', title: 'Geen toestemming', description: 'Geen toegang tot opslag' });
+    		  return;
+  		}
+	}
+        const result = await FilePicker.pickFiles({ types: ['application/json'] });
+        if (result.files.length === 0) return;
+        const file = result.files[0];
+
+        const res = await Filesystem.writeFile({
+  	  path: 'reisplan.json',
+  	  data: JSON.stringify(itinerary, null, 2),
+  	  directory: Directory.External,
+  	  encoding: Encoding.UTF8,
+	});;
+	console.log('Wrote URI:', res.uri);
+        toast({ title: "Succes", description: "Reisplan succesvol opgeslagen." });
+      } catch (err) {
+        console.error("Fout bij mobiel opslaan:", err);
+        toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon reisplan niet opslaan." });
+      }
     }
   };
 
