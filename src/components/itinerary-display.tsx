@@ -119,21 +119,57 @@ export default function ItineraryDisplay() {
     }
   };
 
-  const handleSaveJson = () => {
+  const handleSaveJson = async () => {
     if (!itinerary) return;
 
     const dataStr = JSON.stringify(itinerary, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const blob = new Blob([dataStr], { type: 'application/json' });
 
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', 'reisdata_met_notities.json');
-    linkElement.click();
-    
-    toast({
-        title: "Succes",
-        description: "Reisplan opgeslagen als JSON-bestand.",
-    });
+    // Use the File System Access API if available
+    if ('showSaveFilePicker' in window) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: 'reisdata_met_notities.json',
+          types: [{
+            description: 'JSON Files',
+            accept: { 'application/json': ['.json'] },
+          }],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        toast({
+            title: "Succes",
+            description: "Reisplan succesvol opgeslagen.",
+        });
+      } catch (err) {
+        // This can happen if the user cancels the save dialog
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          console.log('Save dialog was cancelled by the user.');
+        } else {
+          console.error("Fout bij opslaan bestand:", err);
+          toast({
+              variant: "destructive",
+              title: "Opslaan Mislukt",
+              description: "Het reisplan kon niet worden opgeslagen.",
+          });
+        }
+      }
+    } else {
+      // Fallback for older browsers
+      const url = URL.createObjectURL(blob);
+      const linkElement = document.createElement('a');
+      linkElement.href = url;
+      linkElement.download = 'reisdata_met_notities.json';
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+      URL.revokeObjectURL(url);
+      toast({
+          title: "Succes",
+          description: "Reisplan is gedownload.",
+      });
+    }
   };
 
   const toggleAllDays = () => {
@@ -193,39 +229,39 @@ export default function ItineraryDisplay() {
             <CardHeader>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <CardTitle className="font-headline text-3xl text-accent">Galapagos Reisplan</CardTitle>
+                        <CardTitle className="font-headline text-2xl text-accent">Galapagos Reisplan</CardTitle>
                         <CardDescription className="mt-2">Een 15-daagse reis door de Betoverende Eilanden.</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2 flex-wrap justify-end">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                               <Button onClick={handleLoadClick} variant="outline" size="sm" aria-label="Reisplan laden">
+                               <Button onClick={handleLoadClick} variant="outline" size="icon" aria-label="Reisplan laden">
                                     <Upload />
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Reisplan laden</p>
+                              <p>Laden</p>
                             </TooltipContent>
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary} aria-label="Reisplan opslaan">
+                              <Button onClick={handleSaveJson} variant="outline" size="icon" disabled={!itinerary} aria-label="Reisplan opslaan">
                                   <Save />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Reisplan opslaan</p>
+                              <p>Opslaan</p>
                             </TooltipContent>
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button onClick={toggleAllDays} variant="outline" size="sm" disabled={!itinerary} aria-label="Alles openen of sluiten">
+                              <Button onClick={toggleAllDays} variant="outline" size="icon" disabled={!itinerary} aria-label="Alles openen of sluiten">
                                   <ChevronsUpDown />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Alles Open/Dicht</p>
+                              <p>Open/Dicht</p>
                             </TooltipContent>
                           </Tooltip>
                         </div>
