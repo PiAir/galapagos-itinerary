@@ -61,3 +61,10 @@ Of gebruik `npx http-server out`, of open de bestanden direct in de browser.
 3.  Klik op de **Run ▶️**-knop.
 4.  De app wordt gebouwd, geïnstalleerd en gestart op je telefoon.
 5.  Gebruik **Logcat** onderin Android Studio voor debugging
+
+
+**4.  Updaten Android app na wijzigingen in Firebase:**
+
+    npm run build
+    npx cap sync android
+    npx cap run android
