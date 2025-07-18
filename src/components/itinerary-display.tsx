@@ -10,7 +10,7 @@ import { DayCard } from './day-card';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -118,6 +118,21 @@ export default function ItineraryDisplay() {
       reader.readAsText(file);
     }
   };
+  
+  const fallbackSave = (blob: Blob) => {
+    const url = URL.createObjectURL(blob);
+    const linkElement = document.createElement('a');
+    linkElement.href = url;
+    linkElement.download = 'reisdata_met_notities.json';
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
+    URL.revokeObjectURL(url);
+    toast({
+        title: "Succes",
+        description: "Reisplan is gedownload.",
+    });
+  }
 
   const handleSaveJson = async () => {
     if (!itinerary) return;
@@ -143,9 +158,12 @@ export default function ItineraryDisplay() {
             description: "Reisplan succesvol opgeslagen.",
         });
       } catch (err) {
-        // This can happen if the user cancels the save dialog
+        // This can happen if the user cancels the save dialog or if in a sandboxed iframe.
         if (err instanceof DOMException && err.name === 'AbortError') {
           console.log('Save dialog was cancelled by the user.');
+        } else if (err instanceof DOMException && err.name === 'SecurityError') {
+            console.warn("File picker failed, likely due to iframe sandbox. Using fallback download.", err);
+            fallbackSave(blob);
         } else {
           console.error("Fout bij opslaan bestand:", err);
           toast({
@@ -157,18 +175,7 @@ export default function ItineraryDisplay() {
       }
     } else {
       // Fallback for older browsers
-      const url = URL.createObjectURL(blob);
-      const linkElement = document.createElement('a');
-      linkElement.href = url;
-      linkElement.download = 'reisdata_met_notities.json';
-      document.body.appendChild(linkElement);
-      linkElement.click();
-      document.body.removeChild(linkElement);
-      URL.revokeObjectURL(url);
-      toast({
-          title: "Succes",
-          description: "Reisplan is gedownload.",
-      });
+      fallbackSave(blob);
     }
   };
 
