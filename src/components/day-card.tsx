@@ -9,13 +9,15 @@ import {
 } from '@/components/ui/accordion';
 import { Briefcase, Newspaper, Ship, Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 import { Badge } from './ui/badge';
 import { Textarea } from './ui/textarea';
 
 interface DayCardProps {
   day: Day;
-  onNotesChange: (dayNumber: number, notes: string) => void;
+  dayIndex: number;
+  onNotesChange: (dayIndex: number, notes: string) => void;
 }
 
 function Section({ icon, title, children, className }: { icon: React.ReactNode, title: string, children: React.ReactNode, className?: string }) {
@@ -32,7 +34,7 @@ function Section({ icon, title, children, className }: { icon: React.ReactNode, 
     )
 }
 
-export function DayCard({ day, onNotesChange }: DayCardProps) {
+export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
@@ -55,9 +57,18 @@ export function DayCard({ day, onNotesChange }: DayCardProps) {
 
   const contentClassName = !isOnline ? 'offline-content' : '';
 
-  const renderHTML = (htmlString: string) => {
-    return <div className={contentClassName} dangerouslySetInnerHTML={{ __html: htmlString }} />;
-  }
+  const MarkdownRenderer = ({ content }: { content: string }) => (
+    <div className={contentClassName}>
+      <ReactMarkdown
+        components={{
+          a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" />,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
+  );
+
 
   return (
     <AccordionItem value={`day-${day.day}`}>
@@ -69,22 +80,22 @@ export function DayCard({ day, onNotesChange }: DayCardProps) {
       </AccordionTrigger>
       <AccordionContent className="p-4 bg-background rounded-b-md">
         <Section icon={<Ship size={20} />} title="Programma">
-            {renderHTML(day.program)}
+            <MarkdownRenderer content={day.program} />
         </Section>
         
         <Section icon={<Newspaper size={20} />} title="Achtergrond">
-            {renderHTML(day.background)}
+            <MarkdownRenderer content={day.background} />
         </Section>
         
         <Section icon={<Briefcase size={20} />} title="Pakadvies">
-            <p>{day.packing_advice}</p>
+             <MarkdownRenderer content={day.packing_advice} />
         </Section>
 
         <Section icon={<Pencil size={20} />} title="Notities">
             <Textarea
               placeholder="Voeg hier je persoonlijke notities toe..."
               value={day.notes || ''}
-              onChange={(e) => onNotesChange(day.day, e.target.value)}
+              onChange={(e) => onNotesChange(dayIndex, e.target.value)}
               className="mt-2 bg-input border-input"
             />
         </Section>
@@ -92,5 +103,3 @@ export function DayCard({ day, onNotesChange }: DayCardProps) {
     </AccordionItem>
   );
 }
-
-    

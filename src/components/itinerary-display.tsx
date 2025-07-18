@@ -75,10 +75,10 @@ export default function ItineraryDisplay() {
     }
   }, [toast]);
 
-  const handleNotesChange = (dayNumber: number, notes: string) => {
+  const handleNotesChange = (dayIndex: number, notes: string) => {
     if (!itinerary) return;
-    const newItinerary = itinerary.map(day => 
-      day.day === dayNumber ? { ...day, notes } : day
+    const newItinerary = itinerary.map((day, index) => 
+      index === dayIndex ? { ...day, notes } : day
     );
     setItinerary(newItinerary);
     localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
@@ -166,8 +166,8 @@ export default function ItineraryDisplay() {
     return (
         <CardContent>
             <Accordion type="single" collapsible className="w-full">
-                {itinerary.map((day) => (
-                    <DayCard key={day.day} day={day} onNotesChange={handleNotesChange} />
+                {itinerary.map((day, index) => (
+                    <DayCard key={index} day={day} dayIndex={index} onNotesChange={handleNotesChange} />
                 ))}
             </Accordion>
         </CardContent>
