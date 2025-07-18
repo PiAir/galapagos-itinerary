@@ -158,18 +158,18 @@ export default function ItineraryDisplay() {
             description: "Reisplan succesvol opgeslagen.",
         });
       } catch (err) {
-        // This can happen if the user cancels the save dialog or if in a sandboxed iframe.
         if (err instanceof DOMException && err.name === 'AbortError') {
           console.log('Save dialog was cancelled by the user.');
         } else if (err instanceof DOMException && err.name === 'SecurityError') {
-            console.warn("File picker failed, likely due to iframe sandbox. Using fallback download.", err);
+            console.warn("File picker failed due to security sandbox. Using fallback.", err);
             fallbackSave(blob);
         } else {
           console.error("Fout bij opslaan bestand:", err);
+          fallbackSave(blob); // Fallback on other unexpected errors too
           toast({
               variant: "destructive",
               title: "Opslaan Mislukt",
-              description: "Het reisplan kon niet worden opgeslagen.",
+              description: "Kon het bestand niet opslaan, fallback gebruikt.",
           });
         }
       }
