@@ -4,12 +4,13 @@
 import type { Itinerary } from '@/lib/types';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/button';
-import { Upload, Ship, WifiOff, Save, ChevronsUpDown } from 'lucide-react';
+import { Upload, Save, ChevronsUpDown, Ship, WifiOff } from 'lucide-react';
 import { Accordion } from './ui/accordion';
 import { DayCard } from './day-card';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -187,24 +188,46 @@ export default function ItineraryDisplay() {
 
   return (
     <div className="container mx-auto max-w-4xl py-8 px-4">
+      <TooltipProvider>
         <Card className="border-primary/20 bg-card/50">
             <CardHeader>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <CardTitle className="font-headline text-4xl text-accent">Galapagos Reisplan</CardTitle>
-                        <CardDescription className="mt-2">Jouw 15-daagse reis door de Betoverende Eilanden.</CardDescription>
+                        <CardTitle className="font-headline text-3xl text-accent">Galapagos Reisplan</CardTitle>
+                        <CardDescription className="mt-2">Een 15-daagse reis door de Betoverende Eilanden.</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2 flex-wrap justify-end">
-                           <Button onClick={handleLoadClick} variant="outline" size="sm">
-                                <Upload /> Reisplan laden
-                            </Button>
-                            <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary}>
-                                <Save /> Reisplan opslaan
-                            </Button>
-                             <Button onClick={toggleAllDays} variant="outline" size="sm" disabled={!itinerary}>
-                                <ChevronsUpDown /> Alles Open/Dicht
-                            </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                               <Button onClick={handleLoadClick} variant="outline" size="sm" aria-label="Reisplan laden">
+                                    <Upload />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reisplan laden</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary} aria-label="Reisplan opslaan">
+                                  <Save />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reisplan opslaan</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button onClick={toggleAllDays} variant="outline" size="sm" disabled={!itinerary} aria-label="Alles openen of sluiten">
+                                  <ChevronsUpDown />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Alles Open/Dicht</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                         {!isOnline && (
                              <div className="flex items-center text-xs text-destructive gap-2 p-2 rounded-md bg-destructive/10">
@@ -218,6 +241,7 @@ export default function ItineraryDisplay() {
             </CardHeader>
             {renderContent()}
         </Card>
+        </TooltipProvider>
     </div>
   );
 }
