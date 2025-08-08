@@ -4,7 +4,7 @@
 import type { Itinerary } from '@/lib/types';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from './ui/button';
-import { Upload, Save, ChevronsUpDown, Ship, WifiOff } from 'lucide-react';
+import { Upload, Save, ChevronsUpDown, Ship, WifiOff, Film } from 'lucide-react';
 import { Accordion } from './ui/accordion';
 import { DayCard } from './day-card';
 import { useToast } from '@/hooks/use-toast';
@@ -82,21 +82,20 @@ export default function ItineraryDisplay() {
   }, [toast]);
 
   const handleNotesChange = (dayIndex: number, notes: string) => {
-    if (!itinerary) return;
-  
-    // Find the correct index in the original itinerary array
-    const actualIndex = itinerary.findIndex(d => 
-        (dayIndex === -1 ? (d.day === -1 || d.day === "-1") : d.day === regularDays?.[dayIndex]?.day)
-    );
-  
-    if (actualIndex > -1) {
-      const newItinerary = [...itinerary];
-      const dayData = newItinerary[actualIndex];
-      const updatedDayData = { ...dayData, notes };
-      newItinerary[actualIndex] = updatedDayData;
-      setItinerary(newItinerary);
-      localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
-    }
+    if (!itinerary || dayIndex < 0 || dayIndex >= itinerary.length) return;
+
+    const newItinerary = [...itinerary];
+    const dayData = newItinerary[dayIndex];
+    const updatedDayData = { ...dayData, notes };
+    newItinerary[dayIndex] = updatedDayData;
+
+    setItinerary(newItinerary);
+    localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
+    
+    toast({
+        title: "Opgeslagen",
+        description: "Uw notities zijn bijgewerkt.",
+    });
   };
   
   const handleLoadClick = () => {
@@ -112,8 +111,13 @@ export default function ItineraryDisplay() {
           const text = e.target?.result;
           if (typeof text === 'string') {
             const json = JSON.parse(text);
-            setItinerary(json);
-            localStorage.setItem('galapagos-itinerary', text);
+            // Add notes field if it doesn't exist
+            const itineraryWithNotes = json.map((day: any) => ({
+              ...day,
+              notes: day.notes ?? '',
+            }));
+            setItinerary(itineraryWithNotes);
+            localStorage.setItem('galapagos-itinerary', JSON.stringify(itineraryWithNotes));
             toast({
               title: "Succes",
               description: "Reisplan succesvol geladen.",
@@ -188,12 +192,7 @@ export default function ItineraryDisplay() {
   const toggleAllDays = () => {
     if (!itinerary) return;
     const allDayKeys = itinerary.map((day, index) => `day-${index + 1}`);
-    // Special handling for introduction day if its key is different.
-    const introIndex = itinerary.findIndex(d => d.day === -1 || d.day === "-1");
-    if (introIndex !== -1) {
-        allDayKeys[introIndex] = `day-${introIndex + 1}`;
-    }
-
+    
     if (openDays.length === itinerary.length) {
       setOpenDays([]);
     } else {
@@ -236,11 +235,9 @@ export default function ItineraryDisplay() {
     return (
         <CardContent>
             <Accordion type="multiple" value={openDays} onValueChange={setOpenDays} className="w-full">
-                {introduction && <DayCard key={-1} day={introduction} dayIndex={introductionIndex} onNotesChange={(dayIndex, notes) => handleNotesChange(introductionIndex, notes)} />}
-                {regularDays && regularDays.map((day, index) => {
-                     const dayIndexInItinerary = itinerary.findIndex(d => d.day === day.day);
-                     return <DayCard key={dayIndexInItinerary} day={day} dayIndex={dayIndexInItinerary} onNotesChange={(dayIdx, notes) => handleNotesChange(dayIndexInItinerary, notes)} />
-                })}
+                {itinerary.map((day, index) => (
+                    <DayCard key={index} day={day} dayIndex={index} onNotesChange={handleNotesChange} />
+                ))}
             </Accordion>
         </CardContent>
     );
@@ -317,5 +314,3 @@ export default function ItineraryDisplay() {
     </div>
   );
 }
-
-    
