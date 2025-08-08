@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: 'Galapagos Reisplan',
-  description: 'Jouw 15-daagse vakantieplan voor de Galapagos Eilanden.',
+  description: 'Een 15-daagse reis door de Betoverende Eilanden.',
 };
 
 export default function RootLayout({
@@ -27,5 +27,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-    

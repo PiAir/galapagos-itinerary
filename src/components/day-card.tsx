@@ -71,7 +71,7 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
 
 
   const getDayLabel = () => {
-    if (day.day === -1) {
+    if (day.day === -1 || day.day === "-1") {
       return "Inleiding";
     }
     return day.day;
@@ -104,7 +104,7 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
           </Section>
         )}
 
-        {day.notes && (
+        {day.notes !== undefined && (
             <Section icon={<Pencil size={20} />} title="Notities">
                 <Textarea
                   placeholder="Voeg hier je persoonlijke notities toe..."

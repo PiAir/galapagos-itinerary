@@ -21,8 +21,8 @@ export default function ItineraryDisplay() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const introduction = itinerary?.find(day => day.day === -1);
-  const regularDays = itinerary?.filter(day => day.day !== -1);
+  const introduction = itinerary?.find(day => day.day === -1 || day.day === "-1");
+  const regularDays = itinerary?.filter(day => day.day !== -1 && day.day !== "-1");
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -83,11 +83,15 @@ export default function ItineraryDisplay() {
 
   const handleNotesChange = (dayIndex: number, notes: string) => {
     if (!itinerary) return;
-    const newItinerary = itinerary.map((day, index) => 
-      index === dayIndex ? { ...day, notes } : day
-    );
-    setItinerary(newItinerary);
-    localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
+
+    const actualIndex = itinerary.findIndex(d => (dayIndex === -1 ? (d.day === -1 || d.day === "-1") : d.day === regularDays?.[dayIndex]?.day));
+    
+    if (actualIndex > -1) {
+      const newItinerary = [...itinerary];
+      newItinerary[actualIndex] = { ...newItinerary[actualIndex], notes };
+      setItinerary(newItinerary);
+      localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
+    }
   };
   
   const handleLoadClick = () => {
