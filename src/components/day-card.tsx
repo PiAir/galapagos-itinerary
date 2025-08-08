@@ -73,23 +73,29 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
   return (
     <AccordionItem value={`day-${dayIndex + 1}`}>
       <AccordionTrigger className="hover:no-underline">
- <div className="flex items-center gap-4">
- {day.day !== "-1" && <Badge variant="outline" className="text-sm font-headline border-accent text-accent">Dag {day.day}</Badge>}
- <h2 className="text-lg font-headline text-left">{day.title}</h2>
- </div>
+         <div className="flex items-center gap-4">
+         {day.day !== -1 && <Badge variant="outline" className="text-sm font-headline border-accent text-accent">Dag {day.day}</Badge>}
+         <h2 className="text-lg font-headline text-left">{day.title}</h2>
+         </div>
       </AccordionTrigger>
       <AccordionContent className="p-4 bg-background rounded-b-md">
-        <Section icon={<Ship size={20} />} title="Programma">
-            <MarkdownRenderer content={day.program} />
-        </Section>
+        {day.program && (
+          <Section icon={<Ship size={20} />} title="Programma">
+              <MarkdownRenderer content={day.program} />
+          </Section>
+        )}
         
-        <Section icon={<Newspaper size={20} />} title="Achtergrond">
-            <MarkdownRenderer content={day.background} />
-        </Section>
+        {day.background && (
+          <Section icon={<Newspaper size={20} />} title="Achtergrond">
+              <MarkdownRenderer content={day.background} />
+          </Section>
+        )}
         
-        <Section icon={<Briefcase size={20} />} title="Pakadvies">
-             <MarkdownRenderer content={day.packing_advice} />
-        </Section>
+        {day.packing_advice && (
+          <Section icon={<Briefcase size={20} />} title="Pakadvies">
+               <MarkdownRenderer content={day.packing_advice} />
+          </Section>
+        )}
 
         <Section icon={<Pencil size={20} />} title="Notities">
             <Textarea
