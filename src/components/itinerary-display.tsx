@@ -187,10 +187,17 @@ export default function ItineraryDisplay() {
 
   const toggleAllDays = () => {
     if (!itinerary) return;
+    const allDayKeys = itinerary.map((day, index) => `day-${index + 1}`);
+    // Special handling for introduction day if its key is different.
+    const introIndex = itinerary.findIndex(d => d.day === -1 || d.day === "-1");
+    if (introIndex !== -1) {
+        allDayKeys[introIndex] = `day-${introIndex + 1}`;
+    }
+
     if (openDays.length === itinerary.length) {
       setOpenDays([]);
     } else {
-      setOpenDays(itinerary.map((day, index) => `day-${index + 1}`));
+      setOpenDays(allDayKeys);
     }
   };
 
@@ -229,10 +236,10 @@ export default function ItineraryDisplay() {
     return (
         <CardContent>
             <Accordion type="multiple" value={openDays} onValueChange={setOpenDays} className="w-full">
-                {introduction && <DayCard key={-1} day={introduction} dayIndex={-1} onNotesChange={(dayIndex, notes) => handleNotesChange(introductionIndex, notes)} />}
+                {introduction && <DayCard key={-1} day={introduction} dayIndex={introductionIndex} onNotesChange={(dayIndex, notes) => handleNotesChange(introductionIndex, notes)} />}
                 {regularDays && regularDays.map((day, index) => {
                      const dayIndexInItinerary = itinerary.findIndex(d => d.day === day.day);
-                     return <DayCard key={index} day={day} dayIndex={index} onNotesChange={(dayIdx, notes) => handleNotesChange(dayIndexInItinerary, notes)} />
+                     return <DayCard key={dayIndexInItinerary} day={day} dayIndex={dayIndexInItinerary} onNotesChange={(dayIdx, notes) => handleNotesChange(dayIndexInItinerary, notes)} />
                 })}
             </Accordion>
         </CardContent>
@@ -247,7 +254,7 @@ export default function ItineraryDisplay() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <CardTitle className="font-headline text-xl text-accent">{introduction?.title || "Galapagos Reisplan"}</CardTitle>
-                        <CardDescription className="mt-2 text-base">{introduction?.background || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
+                        <CardDescription className="mt-2 text-base">{introduction?.subtitle || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2 flex-wrap justify-end">

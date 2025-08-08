@@ -1,24 +1,44 @@
 
 [
-  {
-    "day": 1,
-    "title": "Aankomst op Baltra & Hooglanden van Santa Cruz",
-    "program": "Bij aankomst op de luchthaven van Baltra word je opgewacht door je gids. We nemen een korte ferry naar het eiland Santa Cruz en rijden vervolgens naar de hooglanden. Hier bezoeken we een reservaat om de reuzenschildpadden in hun natuurlijke habitat te zien. We lunchen in de hooglanden en gaan daarna naar Puerto Ayora om in te checken bij ons hotel.\n\n* **Ochtend**: Vlucht naar Baltra (GPS).\n* **Middag**: Bezoek aan reuzenschildpaddenreservaat.\n* **Avond**: Vrije tijd in Puerto Ayora.",
-    "background": "De Galapagos-reuzenschildpad is een van de meest iconische dieren van de archipel. Ze kunnen meer dan 100 jaar oud worden. De hooglanden van Santa Cruz bieden een weelderig, groen landschap dat sterk contrasteert met de drogere kustgebieden.",
-    "packing_advice": "- Lichte kleding\n- Wandelschoenen\n- Zonnebrandcrème\n- Camera\n- Verrekijker"
-  },
-  {
-    "day": 2,
-    "title": "Charles Darwin Research Station & Tortuga Bay",
-    "program": "In de ochtend bezoeken we het Charles Darwin Research Station om meer te leren over de conservatie-inspanningen op de eilanden. Je ziet hier schildpadden in gevangenschap, van baby's tot volwassen exemplaren. In de middag maken we een wandeling naar Tortuga Bay, een prachtig wit zandstrand waar je kunt zwemmen en relaxen. Pas op voor de sterke stroming!\n\n* **Ochtend**: Bezoek aan Charles Darwin Research Station.\n* **Middag**: Wandeling naar en verblijf op Tortuga Bay.\n* **Avond**: Diner in een lokaal restaurant in Puerto Ayora.",
-    "background": "Het Charles Darwin Research Station speelt een cruciale rol in het behoud van de unieke ecosystemen van de Galapagos. Tortuga Bay is een belangrijk broedgebied voor zeeleguanen en zeeschildpadden.",
-    "packing_advice": "- Zwemkleding\n- Handdoek\n- Veel water\n- Zonnehoed of pet\n- Sandalen of waterschoenen"
-  },
-  {
-    "day": 3,
-    "title": "Dagtocht naar een onbewoond eiland",
-    "program": "Vandaag maken we een dagtocht per boot naar een van de nabijgelegen onbewoonde eilanden, zoals North Seymour, Bartolomé, of Plazas Sur. De bestemming hangt af van de beschikbaarheid en de regels van het Nationaal Park. Elke locatie biedt unieke kansen om wildlife te zien, zoals blauwvoetgenten, zeeleeuwen en landleguanen. Lunch is inbegrepen aan boord.\n\n[Voorbeeld van een dagtocht](https://www.galapagos.org/visit/north-seymour/)\n\n* **Volledige dag**: Boottocht, wandeling met gids, en snorkelmogelijkheid.",
-    "background": "De onbewoonde eilanden zijn streng beschermd om hun ongerepte staat te bewaren. Bezoeken zijn beperkt en altijd onder begeleiding van een gediplomeerde natuurgids. Dit zorgt voor een minimale impact op de fragiele omgeving.",
-    "packing_advice": "- Zeeziektepillen (indien nodig)\n- Windjack\n- Snorkeluitrusting (vaak te huur)\n- Waterdichte tas voor elektronica"
-  }
+    {
+        "day": -1,
+        "title": "Galapagos Reisplan",
+        "subtitle": "Een reisverslag",
+        "program": "Dit is een overzicht van een 15-daagse reis naar de Galapagos Eilanden. Gebruik dit plan als een gids, en voeg je eigen notities toe om je reis te personaliseren.",
+        "background": "De Galápagoseilanden zijn een eilandengroep ter hoogte van de evenaar in de Stille Oceaan. Ze behoren staatkundig tot Ecuador en liggen op ongeveer 1000 kilometer van de westkust van dit land. De eilanden zijn vooral bekend vanwege hun grote verscheidenheid aan dier- en plantensoorten en werden in 1978 toegevoegd aan de Werelderfgoedlijst van UNESCO.",
+        "packing_advice": "Zorg voor zonnebrandcrème, een hoed, en comfortabele wandelschoenen. Een waterdichte camera is ook een aanrader!",
+        "videos": "Bekijk deze [introductievideo](https://www.youtube.com/watch?v=2pP1WJ6B_pA) over de Galapagos."
+    },
+    {
+        "day": "19 - 20 juli 2025",
+        "title": "Aankomst op de Galapagos & Noord-Seymour",
+        "program": "*   Vlucht van Quito/Guayaquil naar Baltra.\n*   Transfer naar de boot en check-in.\n*   Middagbezoek aan Noord-Seymour, een eiland vol met blauwvoetgenten, fregatvogels en zeeleeuwen.",
+        "background": "Noord-Seymour is een klein, plat eiland ontstaan door een geologische opheffing. Het is een van de beste plekken om de beroemde blauwvoetgenten en hun paringsdans te observeren. Fregatvogels met hun opblaasbare rode keelzakken zijn ook een spectaculair gezicht.",
+        "packing_advice": "Lichte kleding, wandelschoenen, zonnebril, hoed, en veel water. Vergeet je camera niet!",
+        "notes": ""
+    },
+    {
+        "day": "21 juli 2025",
+        "title": "Genovesa Eiland: Darwin Bay & El Barranco",
+        "program": "*   Ochtendwandeling in Darwin Bay om roodvoetgenten, zwaluwstaartmeeuwen en andere zeevogels te zien.\n*   Middag: 'Prince Philip's Steps' (El Barranco), een steil pad dat leidt naar een plateau waar je Nazca-genten en stormvogels kunt spotten.",
+        "background": "Genovesa staat bekend als 'Vogeleiland'. Darwin Bay is een ingestorte vulkaankrater. De 'Prince Philip's Steps' zijn vernoemd naar de Britse prins die het eiland in de jaren 60 bezocht.",
+        "packing_advice": "Verrekijker is een must! Goede grip op je schoenen voor de 'steps'.",
+        "notes": ""
+    },
+    {
+        "day": "22 juli 2025",
+        "title": "Isabela Eiland: Vicente Roca Point & Fernandina Eiland",
+        "program": "*   Ochtend: Panga-rit (zodiac) langs de kliffen van Vicente Roca Point om zeevogels en zeeleeuwen te zien. Mogelijk pinguïns!\n*   Middag: Wandeling op Fernandina Eiland, het jongste eiland, met duizenden zeeleguanen en de beroemde vliegende aalscholvers.",
+        "background": "Vicente Roca Point is een overblijfsel van een oude vulkaan. Fernandina is een van de meest ongerepte eilanden ter wereld, zonder geïntroduceerde diersoorten.",
+        "packing_advice": "Waterschoenen kunnen handig zijn voor landingen. Een windjack voor de panga-rit.",
+        "notes": ""
+    },
+    {
+        "day": "23 juli 2025",
+        "title": "Isabela Eiland: Urbina Bay & Tagus Cove",
+        "program": "*   Ochtend: Landing in Urbina Bay, een unieke plek die in 1954 uit de zee werd opgetild, waar je landleguanen en reuzenschildpadden kunt zien.\n*   Middag: Wandeling bij Tagus Cove naar Darwin Lake, een zoutwatermeer in een krater. Historische graffiti van walvisvaarders op de kliffen.",
+        "background": "De opheffing van Urbina Bay was een dramatische geologische gebeurtenis die een stuk zeebodem blootlegde, compleet met koraal. Tagus Cove was een favoriete ankerplaats voor piraten en walvisvaarders.",
+        "packing_advice": "Stevige wandelschoenen voor de lavavelden.",
+        "notes": ""
+    }
 ]
