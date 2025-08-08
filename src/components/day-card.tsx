@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Briefcase, Newspaper, Ship, Pencil } from 'lucide-react';
+import { Briefcase, Newspaper, Ship, Pencil, Film } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
@@ -69,7 +69,6 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
     </div>
   );
 
-
   const getDayLabel = () => {
     if (day.day === -1 || day.day === "-1") {
       return "Inleiding";
@@ -81,7 +80,7 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
     <AccordionItem value={`day-${dayIndex + 1}`}>
       <AccordionTrigger className="hover:no-underline text-lg">
          <div className="flex items-center gap-4">
-         <Badge variant="outline" className="text-sm font-headline border-accent text-accent">{getDayLabel()}</Badge>
+         <Badge variant="outline" className="text-base font-headline border-accent text-accent">{getDayLabel()}</Badge>
          <h2 className="text-lg font-headline text-left">{day.title}</h2>
          </div>
       </AccordionTrigger>
@@ -101,6 +100,12 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
         {day.packing_advice && (
           <Section icon={<Briefcase size={20} />} title="Pakadvies">
                <MarkdownRenderer content={day.packing_advice} />
+          </Section>
+        )}
+
+        {day.videos && (
+          <Section icon={<Film size={20} />} title="Videos">
+              <MarkdownRenderer content={day.videos} />
           </Section>
         )}
 

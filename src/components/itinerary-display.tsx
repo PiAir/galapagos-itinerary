@@ -83,12 +83,17 @@ export default function ItineraryDisplay() {
 
   const handleNotesChange = (dayIndex: number, notes: string) => {
     if (!itinerary) return;
-
-    const actualIndex = itinerary.findIndex(d => (dayIndex === -1 ? (d.day === -1 || d.day === "-1") : d.day === regularDays?.[dayIndex]?.day));
-    
+  
+    // Find the correct index in the original itinerary array
+    const actualIndex = itinerary.findIndex(d => 
+        (dayIndex === -1 ? (d.day === -1 || d.day === "-1") : d.day === regularDays?.[index]?.day)
+    );
+  
     if (actualIndex > -1) {
       const newItinerary = [...itinerary];
-      newItinerary[actualIndex] = { ...newItinerary[actualIndex], notes };
+      const dayData = newItinerary[actualIndex];
+      const updatedDayData = { ...dayData, notes };
+      newItinerary[actualIndex] = updatedDayData;
       setItinerary(newItinerary);
       localStorage.setItem('galapagos-itinerary', JSON.stringify(newItinerary));
     }
@@ -166,12 +171,12 @@ export default function ItineraryDisplay() {
         });
       } catch (err: any) {
         if (err.name === 'AbortError') {
-          // User cancelled the save operation
+          // User cancelled the save operation, do nothing.
         } else if (err.name === 'SecurityError') {
-          console.warn("Save picker failed due to security restrictions, using fallback.", err);
-          fallbackSave(blob);
+            console.warn("Save picker failed due to security restrictions (e.g., in an iframe), using fallback.", err);
+            fallbackSave(blob);
         } else {
-          console.error("Fout bij opslaan met picker:", err);
+          console.error("Fout bij opslaan met picker, fallback wordt gebruikt:", err);
           fallbackSave(blob);
         }
       }
@@ -218,14 +223,19 @@ export default function ItineraryDisplay() {
         </CardContent>
       )
     }
+    
+    // Find the correct index for introduction to pass to handleNotesChange
+    const introductionIndexInItinerary = itinerary.findIndex(d => d.day === -1 || d.day === "-1");
+
 
     return (
         <CardContent>
             <Accordion type="multiple" value={openDays} onValueChange={setOpenDays} className="w-full">
-                {introduction && <DayCard key={-1} day={introduction} dayIndex={-1} onNotesChange={handleNotesChange} />}
-                {regularDays && regularDays.map((day, index) => (
-                    <DayCard key={index} day={day} dayIndex={index} onNotesChange={handleNotesChange} />
-                ))}
+                {introduction && <DayCard key={-1} day={introduction} dayIndex={-1} onNotesChange={(dayIdx, notes) => handleNotesChange(introductionIndexInItinerary, notes)} />}
+                {regularDays && regularDays.map((day, index) => {
+                     const dayIndexInItinerary = itinerary.findIndex(d => d.day === day.day);
+                     return <DayCard key={index} day={day} dayIndex={index} onNotesChange={(dayIdx, notes) => handleNotesChange(dayIndexInItinerary, notes)} />
+                })}
             </Accordion>
         </CardContent>
     );
@@ -238,39 +248,42 @@ export default function ItineraryDisplay() {
             <CardHeader>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <CardTitle className="font-headline text-2xl text-accent">{introduction?.title || "Galapagos Reisplan"}</CardTitle>
-                        <CardDescription className="mt-2">{introduction?.program || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
+                        <CardTitle className="font-headline text-xl text-accent">{introduction?.title || "Galapagos Reisplan"}</CardTitle>
+                        <CardDescription className="mt-2 text-base">{introduction?.program || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2 flex-wrap justify-end">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                               <Button onClick={handleLoadClick} variant="outline" size="icon" aria-label="Reisplan laden">
+                               <Button onClick={handleLoadClick} variant="outline" size="sm" aria-label="Reisplan laden">
                                     <Upload />
+                                    <span className="hidden sm:inline ml-2">Laden</span>
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Laden</p>
+                              <p>Reisplan laden</p>
                             </TooltipContent>
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button onClick={handleSaveJson} variant="outline" size="icon" disabled={!itinerary} aria-label="Reisplan opslaan">
+                              <Button onClick={handleSaveJson} variant="outline" size="sm" disabled={!itinerary} aria-label="Reisplan opslaan">
                                   <Save />
+                                   <span className="hidden sm:inline ml-2">Opslaan</span>
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Opslaan</p>
+                              <p>Reisplan opslaan</p>
                             </TooltipContent>
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button onClick={toggleAllDays} variant="outline" size="icon" disabled={!itinerary} aria-label="Alles openen of sluiten">
+                              <Button onClick={toggleAllDays} variant="outline" size="sm" disabled={!itinerary} aria-label="Alles openen of sluiten">
                                   <ChevronsUpDown />
+                                   <span className="hidden sm:inline ml-2">Open/Dicht</span>
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>Open/Dicht</p>
+                              <p>Alles openen of sluiten</p>
                             </TooltipContent>
                           </Tooltip>
                         </div>

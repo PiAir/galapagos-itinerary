@@ -5,6 +5,7 @@ export interface Day {
   program: string;
   background: string;
   packing_advice: string;
+  videos?: string;
   notes?: string;
 }
 
