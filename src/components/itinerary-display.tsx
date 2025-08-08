@@ -11,9 +11,18 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
-import { FilePicker } from '@capawesome/capacitor-file-picker';
-import write_blob from 'capacitor-blob-writer';
+let Filesystem: any, Directory: any, Encoding: any, write_blob: any;
+if (typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform) {
+  // Only import Capacitor modules if running in a native environment
+  // @ts-ignore
+  Filesystem = require('@capacitor/filesystem').Filesystem;
+  // @ts-ignore
+  Directory = require('@capacitor/filesystem').Directory;
+  // @ts-ignore
+  Encoding = require('@capacitor/filesystem').Encoding;
+  // @ts-ignore
+  write_blob = require('capacitor-blob-writer').default;
+}
 
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -141,27 +150,41 @@ export default function ItineraryDisplay() {
     toast({ title: "Progress", description: "Start opslaan reisplan." });
     console.log('Start handleSaveJson');
     if (!itinerary) {
-	toast({ title: "Fout", description: "Geen itinerary om op te slaan." });
-	return;
+      toast({ title: "Fout", description: "Geen itinerary om op te slaan." });
+      return;
     }
     const dataStr = JSON.stringify(itinerary, null, 2);
 
-    try {
-	const blob = new Blob([dataStr], { type: 'application/json' });
-	const uri = await write_blob({
-  	   path: `reisplan-${Date.now()}.json`,
-  	   directory: Directory.Documents,
-  	   blob,
-  	   recursive: true,
-  	   on_fallback(err) {
-    	     console.warn('Fallback write:', err);
-  	   }
-	});
-	console.log('Schrijf-URI:', uri);
-	toast({ title: 'Succes', description: 'Reisplan opgeslagen.' });
-    } catch (err) {
-      console.error("Fout bij mobiel opslaan:", err);
-      toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon JSON niet opslaan." });
+    // Detect if running in Capacitor native (Android/iOS) or web
+    const isCapacitorNative = typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform;
+
+    if (isCapacitorNative && write_blob && Directory) {
+      try {
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const uri = await write_blob({
+          path: `reisplan-${Date.now()}.json`,
+          directory: Directory.Documents,
+          blob,
+          recursive: true,
+          on_fallback(err: any) {
+            console.warn('Fallback write:', err);
+          }
+        });
+        console.log('Schrijf-URI:', uri);
+        toast({ title: 'Succes', description: 'Reisplan opgeslagen.' });
+      } catch (err) {
+        console.error("Fout bij mobiel opslaan:", err);
+        toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon JSON niet opslaan." });
+      }
+    } else {
+      // Web/Next.js fallback
+      try {
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        fallbackSave(blob);
+      } catch (err) {
+        console.error("Fout bij web opslaan:", err);
+        toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon JSON niet opslaan." });
+      }
     }
   };
 
@@ -266,7 +289,16 @@ export default function ItineraryDisplay() {
                         )}
                     </div>
                 </div>
-                <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".json" />
+                <label htmlFor="itinerary-file-upload" className="sr-only">Reisplan JSON uploaden</label>
+                <input
+                  id="itinerary-file-upload"
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept=".json"
+                  aria-label="Reisplan JSON uploaden"
+                />
             </CardHeader>
             {renderContent()}
         </Card>
