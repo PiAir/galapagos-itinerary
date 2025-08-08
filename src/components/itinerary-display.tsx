@@ -86,7 +86,7 @@ export default function ItineraryDisplay() {
   
     // Find the correct index in the original itinerary array
     const actualIndex = itinerary.findIndex(d => 
-        (dayIndex === -1 ? (d.day === -1 || d.day === "-1") : d.day === regularDays?.[index]?.day)
+        (dayIndex === -1 ? (d.day === -1 || d.day === "-1") : d.day === regularDays?.[dayIndex]?.day)
     );
   
     if (actualIndex > -1) {
@@ -224,14 +224,12 @@ export default function ItineraryDisplay() {
       )
     }
     
-    // Find the correct index for introduction to pass to handleNotesChange
-    const introductionIndexInItinerary = itinerary.findIndex(d => d.day === -1 || d.day === "-1");
-
-
+    const introductionIndex = itinerary.findIndex(d => d.day === -1 || d.day === "-1");
+    
     return (
         <CardContent>
             <Accordion type="multiple" value={openDays} onValueChange={setOpenDays} className="w-full">
-                {introduction && <DayCard key={-1} day={introduction} dayIndex={-1} onNotesChange={(dayIdx, notes) => handleNotesChange(introductionIndexInItinerary, notes)} />}
+                {introduction && <DayCard key={-1} day={introduction} dayIndex={-1} onNotesChange={(dayIndex, notes) => handleNotesChange(introductionIndex, notes)} />}
                 {regularDays && regularDays.map((day, index) => {
                      const dayIndexInItinerary = itinerary.findIndex(d => d.day === day.day);
                      return <DayCard key={index} day={day} dayIndex={index} onNotesChange={(dayIdx, notes) => handleNotesChange(dayIndexInItinerary, notes)} />
@@ -249,7 +247,7 @@ export default function ItineraryDisplay() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <CardTitle className="font-headline text-xl text-accent">{introduction?.title || "Galapagos Reisplan"}</CardTitle>
-                        <CardDescription className="mt-2 text-base">{introduction?.program || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
+                        <CardDescription className="mt-2 text-base">{introduction?.background || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2 flex-wrap justify-end">
@@ -312,3 +310,5 @@ export default function ItineraryDisplay() {
     </div>
   );
 }
+
+    
