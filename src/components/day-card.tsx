@@ -73,10 +73,10 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
   return (
     <AccordionItem value={`day-${dayIndex + 1}`}>
       <AccordionTrigger className="hover:no-underline">
-        <div className="flex items-center gap-4">
-            <Badge variant="outline" className="text-sm font-headline border-accent text-accent">Dag {day.day}</Badge>
-            <h2 className="text-lg font-headline text-left">{day.title}</h2>
-        </div>
+ <div className="flex items-center gap-4">
+ {day.day !== "-1" && <Badge variant="outline" className="text-sm font-headline border-accent text-accent">Dag {day.day}</Badge>}
+ <h2 className="text-lg font-headline text-left">{day.title}</h2>
+ </div>
       </AccordionTrigger>
       <AccordionContent className="p-4 bg-background rounded-b-md">
         <Section icon={<Ship size={20} />} title="Programma">
