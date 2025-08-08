@@ -11,18 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from './ui/tooltip';
-let Filesystem: any, Directory: any, Encoding: any, write_blob: any;
-if (typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform) {
-  // Only import Capacitor modules if running in a native environment
-  // @ts-ignore
-  Filesystem = require('@capacitor/filesystem').Filesystem;
-  // @ts-ignore
-  Directory = require('@capacitor/filesystem').Directory;
-  // @ts-ignore
-  Encoding = require('@capacitor/filesystem').Encoding;
-  // @ts-ignore
-  write_blob = require('capacitor-blob-writer').default;
-}
+
 
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
@@ -158,8 +147,13 @@ export default function ItineraryDisplay() {
     // Detect if running in Capacitor native (Android/iOS) or web
     const isCapacitorNative = typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform;
 
-    if (isCapacitorNative && write_blob && Directory) {
+    if (isCapacitorNative) {
       try {
+        // Dynamically require Capacitor modules only if native
+        // @ts-ignore
+        const Directory = require('@capacitor/filesystem').Directory;
+        // @ts-ignore
+        const write_blob = require('capacitor-blob-writer').default;
         const blob = new Blob([dataStr], { type: 'application/json' });
         const uri = await write_blob({
           path: `reisplan-${Date.now()}.json`,
