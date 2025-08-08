@@ -70,11 +70,18 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
   );
 
 
+  const getDayLabel = () => {
+    if (day.day === -1) {
+      return "Inleiding";
+    }
+    return day.day;
+  }
+
   return (
     <AccordionItem value={`day-${dayIndex + 1}`}>
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline text-lg">
          <div className="flex items-center gap-4">
-         {day.day !== -1 && <Badge variant="outline" className="text-sm font-headline border-accent text-accent">Dag {day.day}</Badge>}
+         <Badge variant="outline" className="text-sm font-headline border-accent text-accent">{getDayLabel()}</Badge>
          <h2 className="text-lg font-headline text-left">{day.title}</h2>
          </div>
       </AccordionTrigger>
@@ -97,14 +104,16 @@ export function DayCard({ day, dayIndex, onNotesChange }: DayCardProps) {
           </Section>
         )}
 
-        <Section icon={<Pencil size={20} />} title="Notities">
-            <Textarea
-              placeholder="Voeg hier je persoonlijke notities toe..."
-              value={day.notes || ''}
-              onChange={(e) => onNotesChange(dayIndex, e.target.value)}
-              className="mt-2 bg-input border-input"
-            />
-        </Section>
+        {day.notes && (
+            <Section icon={<Pencil size={20} />} title="Notities">
+                <Textarea
+                  placeholder="Voeg hier je persoonlijke notities toe..."
+                  value={day.notes || ''}
+                  onChange={(e) => onNotesChange(dayIndex, e.target.value)}
+                  className="mt-2 bg-input border-input"
+                />
+            </Section>
+        )}
       </AccordionContent>
     </AccordionItem>
   );

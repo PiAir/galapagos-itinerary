@@ -21,6 +21,9 @@ export default function ItineraryDisplay() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
+  const introduction = itinerary?.find(day => day.day === -1);
+  const regularDays = itinerary?.filter(day => day.day !== -1);
+
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -136,49 +139,40 @@ export default function ItineraryDisplay() {
   }
 
   const handleSaveJson = async () => {
-    toast({ title: "Progress", description: "Start opslaan reisplan." });
-    console.log('Start handleSaveJson');
-    if (!itinerary) {
-      toast({ title: "Fout", description: "Geen itinerary om op te slaan." });
-      return;
-    }
+    if (!itinerary) return;
+
     const dataStr = JSON.stringify(itinerary, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
 
-    // Detect if running in Capacitor native (Android/iOS) or web
-    const isCapacitorNative = typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform;
-
-    if (isCapacitorNative) {
+    if ('showSaveFilePicker' in window) {
       try {
-        // Dynamically require Capacitor modules only if native
-        // @ts-ignore
-        const Directory = require('@capacitor/filesystem').Directory;
-        // @ts-ignore
-        const write_blob = require('capacitor-blob-writer').default;
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const uri = await write_blob({
-          path: `reisplan-${Date.now()}.json`,
-          directory: Directory.Documents,
-          blob,
-          recursive: true,
-          on_fallback(err: any) {
-            console.warn('Fallback write:', err);
-          }
+        const handle = await window.showSaveFilePicker({
+          suggestedName: 'reisdata_met_notities.json',
+          types: [{
+            description: 'JSON Files',
+            accept: { 'application/json': ['.json'] },
+          }],
         });
-        console.log('Schrijf-URI:', uri);
-        toast({ title: 'Succes', description: 'Reisplan opgeslagen.' });
-      } catch (err) {
-        console.error("Fout bij mobiel opslaan:", err);
-        toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon JSON niet opslaan." });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        toast({
+            title: "Succes",
+            description: "Reisplan opgeslagen.",
+        });
+      } catch (err: any) {
+        if (err.name === 'AbortError') {
+          // User cancelled the save operation
+        } else if (err.name === 'SecurityError') {
+          console.warn("Save picker failed due to security restrictions, using fallback.", err);
+          fallbackSave(blob);
+        } else {
+          console.error("Fout bij opslaan met picker:", err);
+          fallbackSave(blob);
+        }
       }
     } else {
-      // Web/Next.js fallback
-      try {
-        const blob = new Blob([dataStr], { type: 'application/json' });
         fallbackSave(blob);
-      } catch (err) {
-        console.error("Fout bij web opslaan:", err);
-        toast({ variant: "destructive", title: "Opslaan mislukt", description: "Kon JSON niet opslaan." });
-      }
     }
   };
 
@@ -224,7 +218,8 @@ export default function ItineraryDisplay() {
     return (
         <CardContent>
             <Accordion type="multiple" value={openDays} onValueChange={setOpenDays} className="w-full">
-                {itinerary.map((day, index) => (
+                {introduction && <DayCard key={-1} day={introduction} dayIndex={-1} onNotesChange={handleNotesChange} />}
+                {regularDays && regularDays.map((day, index) => (
                     <DayCard key={index} day={day} dayIndex={index} onNotesChange={handleNotesChange} />
                 ))}
             </Accordion>
@@ -239,8 +234,8 @@ export default function ItineraryDisplay() {
             <CardHeader>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <CardTitle className="font-headline text-2xl text-accent">Galapagos Reisplan</CardTitle>
-                        <CardDescription className="mt-2">Een 15-daagse reis door de Betoverende Eilanden.</CardDescription>
+                        <CardTitle className="font-headline text-2xl text-accent">{introduction?.title || "Galapagos Reisplan"}</CardTitle>
+                        <CardDescription className="mt-2">{introduction?.program || "Een 15-daagse reis door de Betoverende Eilanden."}</CardDescription>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="flex gap-2 flex-wrap justify-end">
