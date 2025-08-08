@@ -12,6 +12,9 @@
 .prose ul, .prose ol {
   @apply ml-6 my-4 list-disc;
 }
+.prose h3 {
+  @apply text-accent italic font-headline mb-2 mt-4 text-lg;
+}
 
 .prose img {
     max-width: 100%;
